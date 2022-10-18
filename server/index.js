@@ -24,6 +24,10 @@ const socketIO = require('socket.io')(http, {
 socketIO.on('connection', (socket) => {
     //logs ID whenever user visits the page
     console.log(`⚡: ${socket.id} user just connected!`);
+    //listens for drag event and logs data
+    socket.on("taskDragged", (data) => {
+        console.log(data);
+    })
     //disconnects socket on refreshe or close of website
     socket.on('disconnect', () => {
             socket.disconnect()

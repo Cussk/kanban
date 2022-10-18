@@ -9,6 +9,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/task" element={<Task />} />
+        {/* routes to comment page based on item category and id */}
           <Route path="/comments/:category/:id" element={<Comments />} />
         </Routes>
       </BrowserRouter>

@@ -53,6 +53,37 @@ socketIO.on('connection', (socket) => {
     socket.emit("tasks", tasks);
     });
 
+    //listens for comment creation event
+    socket.on("addComment", (data) => {
+        const {category, userId, comment, id} = data;
+        //gets item in task's category
+        const taskItems = tasks[category].items;
+        //loops through the list of items to find matching id
+        for (let i = 0; i<taskItems.length; i++) {
+            if (taskItems[i].id === id) {
+                //then adds the comment to the list of comments under the item (task)
+                taskItems[i].comments.push({
+                    name: userId,
+                    text: comment,
+                    id: fetchID(),
+                });
+                //sends new event to React app
+                socket.emit("comments", taskItems[i].comments);
+            };
+        };
+    });
+
+    //listens for fetch comments event and returns list of comments to app
+    socket.on("fetchComments", (data) => {
+        const { category, id } = data;
+        const taskItems = tasks[category].items;
+        for (let i = 0; i < taskItems.length; i++) {
+            if (taskItems[i].id === id) {
+                socket.emit("comments", taskItems[i].comments);
+            };
+        };
+    });
+
     //disconnects socket on refreshe or close of website
     socket.on('disconnect', () => {
             socket.disconnect()

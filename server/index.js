@@ -11,6 +11,7 @@ app.use(express.json());
 //imports http and cors library aloowing data transfer between client and server
 const http = require("http").Server(app);
 const cors = require("cors");
+const { title } = require("process");
 
 //imports Socket.io to create real-time connection
 const socketIO = require('socket.io')(http, {
@@ -31,12 +32,58 @@ socketIO.on('connection', (socket) => {
     });
 });
 
+//generates random number
+const fetchID = () => Math.random().toString(36).substring(2,10);
+
+//nested object
+let tasks = {
+    pendinh: {
+        title: [
+            {
+                id: fetchID(),
+                title: "Send the Figma file to Dima",
+                comments: [],
+            },
+        ],
+    },
+    ongoing: {
+        title: "ongoing",
+        items: [
+            {
+                id: fetchID(),
+                title: "Review GitHub issues",
+                comments: [
+                    {
+                        name: "David",
+                        text: "Ensure you review before merging",
+                        id: fetchID(),
+                    },
+                ],
+            },
+        ],
+    },
+    completed: {
+        title:"completed",
+        items: [
+            {
+                id: fetchID(),
+                title: "Create technical contents",
+                comments: [
+                    {
+                        name: "Dima",
+                        text: "Make sure you check the requirements",
+                        id: fetchID(),  
+                    },
+                ],
+            },
+        ],
+    },
+};
 
 //returns json object when visiting app
 app.get("/api", (req, res) => {
-    res.json({
-        message: "Hello world",
-    });
+    //hosts the tasks
+    res.json(tasks);
 });
 
 //console logs which port is being accessed

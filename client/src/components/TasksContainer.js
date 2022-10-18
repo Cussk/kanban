@@ -18,6 +18,11 @@ const TasksContainer = () => {
         fetchTasks();
     }, []);
 
+    //listener for tasks event
+    useEffect(() => {
+        socket.on("tasks", (data) => setTasks(data));
+    }, [socket]);
+
     //this function is the value of the onDragEnd prop
     const handleDragEnd = ({destination, source}) => {
         if (!destination) return; //does nothing if destination is not droppable

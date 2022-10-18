@@ -24,10 +24,24 @@ const socketIO = require('socket.io')(http, {
 socketIO.on('connection', (socket) => {
     //logs ID whenever user visits the page
     console.log(`⚡: ${socket.id} user just connected!`);
-    //listens for drag event and logs data
+    //listens for drag event
     socket.on("taskDragged", (data) => {
-        console.log(data);
-    })
+        //gets the item that was dragged
+    const itemMoved = {
+        ...tasks[source.droppableId].items[source.index],
+    };
+    console.log("DraggedItems>>>", itemMoved);
+
+    //removes item from its source
+    tasks[source.droppableId].items.splice(source.index, 1);
+
+    //add item to destination using destination index
+    tasks[destination.droppableId].items.splice(destination.index, 0, itemMoved);
+
+    //sends updated tasks object to React app
+    socket.emit("tasks", tasks);
+    });
+
     //disconnects socket on refreshe or close of website
     socket.on('disconnect', () => {
             socket.disconnect()

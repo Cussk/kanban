@@ -13,11 +13,11 @@ const Login = () => {
         localStorage.setItem("userId", username);
         setUsername("");
         // redirects to the Tasks page.
-        navigate("/tasks");
+        navigate("/task");
     };
     return (
         <div className="login__container">
-            <form className="login__form" onSubmit={{handleLogin}}>
+            <form className="login__form" onSubmit={handleLogin}>
                 <label htmlFor="username">Provide a username</label>
                 <input 
                     type='text'
@@ -25,7 +25,7 @@ const Login = () => {
                     id='username'
                     required
                     onChange={(e) => setUsername(e.target.value)}
-                    value={usenamer}     
+                    value={username}     
                 />
                 <button>SIGN IN</button>
             </form>

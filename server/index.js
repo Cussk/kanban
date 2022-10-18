@@ -4,21 +4,21 @@ const app = express();
 //hardcodes port to 4000
 const PORT = 4000;
 
-//middleware
-app.use(express.urlencoded({extended: true}));
-app.use(express.json());
-
 //imports http and cors library aloowing data transfer between client and server
 const http = require("http").Server(app);
 const cors = require("cors");
-const { title } = require("process");
 
 //imports Socket.io to create real-time connection
 const socketIO = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:3000"
-    }
+        origin: "http://localhost:3000",
+    },
 });
+
+//middleware
+app.use(cors());
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 //connects to react app, creates unique ID for each socket
 socketIO.on('connection', (socket) => {
@@ -28,7 +28,7 @@ socketIO.on('connection', (socket) => {
     //listens for create task event
     socket.on("createTask", (data) => {
         //constructs object accodrding to data structure
-        const newTask = {id: fetchID(), title:data.task, comments: []};
+        const newTask = {id: fetchID(), title: data.task, comments: []};
         //adds task to pending category
         tasks["pending"].items.push(newTask);
         //sends task event for update
@@ -97,7 +97,7 @@ const fetchID = () => Math.random().toString(36).substring(2,10);
 
 //nested object for task data structure
 let tasks = {
-    pendinh: {
+    pending: {
         title: [
             {
                 id: fetchID(),

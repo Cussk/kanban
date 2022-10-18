@@ -1,4 +1,4 @@
-import React, {UseState} from "react";
+import React, {useState} from "react";
 
 const AddTask = ({socket}) => {
     const [task, setTask] = useState("");

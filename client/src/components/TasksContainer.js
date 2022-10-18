@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-const TasksContainer = () => {
+const TasksContainer = ({socket}) => {
     const [tasks, setTasks] = useState({});
 
     //fetches tasks from json object on server and imports data into array

@@ -24,6 +24,17 @@ const socketIO = require('socket.io')(http, {
 socketIO.on('connection', (socket) => {
     //logs ID whenever user visits the page
     console.log(`⚡: ${socket.id} user just connected!`);
+
+    //listens for create task event
+    socket.on("createTask", (data) => {
+        //constructs object accodrding to data structure
+        const newTask = {id: fetchID(), title:data.task, comments: []};
+        //adds task to pending category
+        tasks["pending"].items.push(newTask);
+        //sends task event for update
+        socket.emit("tasks", tasks);
+    });
+    
     //listens for drag event
     socket.on("taskDragged", (data) => {
         //gets the item that was dragged
@@ -53,7 +64,7 @@ socketIO.on('connection', (socket) => {
 //generates random number
 const fetchID = () => Math.random().toString(36).substring(2,10);
 
-//nested object
+//nested object for task data structure
 let tasks = {
     pendinh: {
         title: [

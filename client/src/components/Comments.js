@@ -53,7 +53,7 @@ const Comments = () => {
                 {commentList.map((comment) => (
                     <div key={comment.id}>
                         <p>
-                            <span style={{fontWeight: "bold"}}>{comment.text}</span>
+                            <span style={{fontWeight: "bold"}}>{comment.text}</span>by {" "}
                             {comment.name}
                         </p>
                     </div>

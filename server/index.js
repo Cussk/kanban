@@ -20,8 +20,56 @@ app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
+//generates random number
+const fetchID = () => Math.random().toString(36).substring(2,10);
+
+//nested object for task data structure
+let tasks = {
+    pending: {
+        title: [
+            {
+                id: fetchID(),
+                title: "Send the Figma file to Dima",
+                comments: [],
+            },
+        ],
+    },
+    ongoing: {
+        title: "ongoing",
+        items: [
+            {
+                id: fetchID(),
+                title: "Review GitHub issues",
+                comments: [
+                    {
+                        name: "David",
+                        text: "Ensure you review before merging",
+                        id: fetchID(),
+                    },
+                ],
+            },
+        ],
+    },
+    completed: {
+        title:"completed",
+        items: [
+            {
+                id: fetchID(),
+                title: "Create technical contents",
+                comments: [
+                    {
+                        name: "Dima",
+                        text: "Make sure you check the requirements",
+                        id: fetchID(),  
+                    },
+                ],
+            },
+        ],
+    },
+};
+
 //connects to react app, creates unique ID for each socket
-socketIO.on('connection', (socket) => {
+socketIO.on("connection", (socket) => {
     //logs ID whenever user visits the page
     console.log(`⚡: ${socket.id} user just connected!`);
 
@@ -37,6 +85,7 @@ socketIO.on('connection', (socket) => {
     
     //listens for drag event
     socket.on("taskDragged", (data) => {
+        const {source, destination } = data;
         //gets the item that was dragged
     const itemMoved = {
         ...tasks[source.droppableId].items[source.index],
@@ -92,53 +141,6 @@ socketIO.on('connection', (socket) => {
     });
 });
 
-//generates random number
-const fetchID = () => Math.random().toString(36).substring(2,10);
-
-//nested object for task data structure
-let tasks = {
-    pending: {
-        title: [
-            {
-                id: fetchID(),
-                title: "Send the Figma file to Dima",
-                comments: [],
-            },
-        ],
-    },
-    ongoing: {
-        title: "ongoing",
-        items: [
-            {
-                id: fetchID(),
-                title: "Review GitHub issues",
-                comments: [
-                    {
-                        name: "David",
-                        text: "Ensure you review before merging",
-                        id: fetchID(),
-                    },
-                ],
-            },
-        ],
-    },
-    completed: {
-        title:"completed",
-        items: [
-            {
-                id: fetchID(),
-                title: "Create technical contents",
-                comments: [
-                    {
-                        name: "Dima",
-                        text: "Make sure you check the requirements",
-                        id: fetchID(),  
-                    },
-                ],
-            },
-        ],
-    },
-};
 
 //returns json object when visiting app
 app.get("/api", (req, res) => {

@@ -10,17 +10,14 @@ const TasksContainer = ({socket}) => {
         function fetchTasks() {
             fetch("http://localhost:4000/api")
                 .then((res) => res.json())
-                .then((data) => {
-                    console.log(data);
-                    setTasks(data);
-                });
+                .then((data) => setTasks(data));
         }
         fetchTasks();
     }, []);
 
     //listener for tasks event
     useEffect(() => {
-        socket.on("tasks", (data) => setTasks(data));
+        socket.on("tasks", (data) => {setTasks(data)});
     }, [socket]);
 
     //this function is the value of the onDragEnd prop
@@ -29,7 +26,7 @@ const TasksContainer = ({socket}) => {
         if(
             destination.index === source.index &&
             destination.droppableId === source.droppableId
-        ) // if source and destinetion index match and are droppable location sends message to node server with socketIO
+        ) // if source and destination index match and are droppable location sends message to node server with socketIO
             return;
 
         socket.emit("taskDragged", {
@@ -85,7 +82,7 @@ const TasksContainer = ({socket}) => {
                                         ))};
                                         {provided.placeholder}
                                     </div>
-                                )};'
+                                )};
                             </Droppable>
                         </div>
                     </div>
